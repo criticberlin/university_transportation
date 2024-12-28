@@ -99,8 +99,8 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="row no-gutters slider-text justify-content-start align-items-center">
             <div class="col-lg-6 col-md-6 ftco-animate d-flex align-items-end">
                 <div class="text">
-                    <h1 class="mb-4">Manage Users</h1>
-                    <p style="font-size: 18px;">Manage student accounts and their information</p>
+                    <h1 class="mb-4">Manage Driver</h1>
+                    <p style="font-size: 18px;">Manage Driver accounts and their information</p>
                 </div>
             </div>
         </div>
@@ -146,10 +146,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <?php endforeach; ?>
                         </tbody>
                     </table>
-                </div>
-
-                <div class="text-center mt-4">
-                    <a class="btn btn-custom mr-2" href="add_user.php">Add New User</a>
                 </div>
             </div>
         </div>
