@@ -14,7 +14,7 @@ $stmt = $pdo->query("SELECT t.TripID, t.EventName, t.EventDate, r.StartPoint, r.
 $trips = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Include database connection or user data retrieval logic here
-$user_name = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : 'Driver';
+$user_name = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : 'Student';
 ?>
 <!DOCTYPE html>
 <html lang="en">
