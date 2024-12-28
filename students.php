@@ -97,35 +97,6 @@ $user_name = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : 'Student';
   </div>
 </div>
 
-<section class="ftco-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h2 class="mb-4">Student Information</h2>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Student ID</th>
-                            <th>Name</th>
-                            <th>Course</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        // Example dynamic rows; replace with actual database queries
-                        echo "<tr>";
-                        echo "<td>12345</td>";
-                        echo "<td>" . htmlspecialchars($_SESSION['FullName']) . "</td>";
-                        echo "<td>Data Science</td>";
-                        echo "</tr>";
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</section>
-
 <footer class="ftco-footer ftco-bg-dark ftco-section">
       <div class="container">
         <div class="row mb-5">

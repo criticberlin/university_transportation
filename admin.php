@@ -121,14 +121,6 @@ $user_name = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : 'Admin';
   </div>
 </div>
 
-<section class="ftco-section">
-    <div class="container">
-
-            </div>
-        </div>
-    </div>
-</section>
-
 <footer class="ftco-footer ftco-bg-dark ftco-section">
       <div class="container">
         <div class="row mb-5">
