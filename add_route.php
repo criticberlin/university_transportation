@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+include 'db.php'; // Assuming your PDO connection is set in this file
 session_start();
 
 if (!isset($_SESSION['UserID']) || $_SESSION['UserType'] != 'Administrator') {
@@ -13,18 +13,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $distance = $_POST['DistanceKM'];
     $description = $_POST['RouteDescription'];
 
-    $sql = "INSERT INTO Routes (StartPoint, EndPoint, DistanceKM, RouteDescription) VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssds", $startPoint, $endPoint, $distance, $description);
+    $sql = "INSERT INTO Routes (StartPoint, EndPoint, DistanceKM, RouteDescription) VALUES (:startPoint, :endPoint, :distance, :description)";
+    $stmt = $pdo->prepare($sql);
 
+    // Bind parameters using PDO's bindParam method
+    $stmt->bindParam(':startPoint', $startPoint, PDO::PARAM_STR);
+    $stmt->bindParam(':endPoint', $endPoint, PDO::PARAM_STR);
+    $stmt->bindParam(':distance', $distance, PDO::PARAM_STR);
+    $stmt->bindParam(':description', $description, PDO::PARAM_STR);
+
+    // Execute the statement and check for success
     if ($stmt->execute()) {
         echo "Route added successfully!";
         header("Location: manage_routes.php");
         exit();
     } else {
-        echo "Error: " . $stmt->error;
+        echo "Error: " . $stmt->errorInfo()[2];
     }
-    $stmt->close();
 }
 ?>
 

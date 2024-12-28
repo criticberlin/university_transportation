@@ -5,6 +5,9 @@ $dbname = 'university_transportation';
 $username = 'root';
 $password = '';
 
+
+
+
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
 

@@ -1,11 +1,13 @@
 <?php
+include 'db.php';
 session_start();
+
+
 if (!isset($_SESSION['UserID']) || $_SESSION['UserType'] != 'Student') {
     header("Location: login.html");
     exit();
 }
 
-include 'db.php';
 
 $userID = $_SESSION['UserID'];
 
@@ -13,7 +15,9 @@ $userID = $_SESSION['UserID'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reservation_id'])) {
     $reservationID = $_POST['reservation_id'];
 
-    
+    $stmt = $pdo->prepare("INSERT INTO Routes (StartPoint, EndPoint) VALUES (?, ?)");
+$stmt->execute([$startPoint, $endPoint]);
+
     $stmtCheck = $pdo->prepare("SELECT COUNT(*) FROM EventReservations WHERE EventReservationID = ? AND UserID = ? AND Status = 'Confirmed'");
     $stmtCheck->execute([$reservationID, $userID]);
 

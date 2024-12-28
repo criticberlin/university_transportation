@@ -3,15 +3,15 @@ try {
     $pdo = new PDO("mysql:host=localhost;dbname=university_transportation", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $password = "driver123";
+    $password = "student123";
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     $sql = "INSERT INTO users (FullName, Email, PhoneNumber, UserType, PasswordHash, DateJoined) 
             VALUES (
-                'Driver User', 
-                'driver@university.edu', 
+                'galal User', 
+                'student@university.edu', 
                 '1234567890', 
-                'Driver', 
+                'Student', 
                 :hashedPassword,
                 CURRENT_TIMESTAMP
             )";
