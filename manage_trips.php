@@ -30,8 +30,9 @@ if (!$result) {
 
 <body>
     <h1>Manage Trips</h1>
+    <a href="add_event_type.php">Add New Event Type</a><br><br>
     <a href="add_trip.php">Add New Trip</a><br><br>
-
+    
     <?php if ($result->rowCount() > 0): ?>
         <table border="1">
             <tr>

@@ -37,8 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <h1>Add New Event Type</h1>
     <form method="POST">
-        <label>Event Type Name:</label>
-        <input type="text" name="EventTypeName" required><br>
+        <!-- <label>Event Type Name:</label>
+        <input type="text" name="EventTypeName" required><br> -->
 
         <button type="submit">Add Event Type</button>
     </form>
