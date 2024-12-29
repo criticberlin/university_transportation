@@ -1,69 +1,53 @@
 <?php
-session_start();
+include 'db.php';  
 
-if (!isset($_SESSION['UserID']) || $_SESSION['UserType'] != 'Administrator') {
-    header("Location: login.php");
-    exit();
-}
+$sql = "
+    SELECT 
+        ER.EventReservationID AS ReservationID,
+        U.FullName AS UserName, 
+        T.EventName AS EventName,
+        T.EventDate AS EventDate,
+        Rt.StartPoint,
+        Rt.EndPoint,
+        ER.Status,
+        ER.ReservationDate
+    FROM eventreservations ER
+    INNER JOIN Users U ON ER.UserID = U.UserID
+    INNER JOIN Trips T ON ER.TripID = T.TripID
+    INNER JOIN Routes Rt ON T.RouteID = Rt.RouteID
+";
 
-include 'db.php';
+try {
+    $stmt = $pdo->query($sql);
 
-$sql = "SELECT t.TripID, r.StartPoint, r.EndPoint, b.PlateNumber, t.EventName, t.EventDate, t.Description
-        FROM Trips t
-        JOIN Routes r ON t.RouteID = r.RouteID
-        JOIN Buses b ON t.BusID = b.BusID";
-$result = $pdo->query($sql); 
+    if ($stmt->rowCount() > 0) {
+        echo "<table border='1'>
+                <tr>
+                    <th>Reservation ID</th>
+                    <th>User Name</th>
+                    <th>Event Name</th>
+                    <th>Event Date</th>
+                    <th>Route</th>
+                    <th>Status</th>
+                    <th>Reservation Date</th>
+                </tr>";
 
-if (!$result) {
-    die("Error executing query: " . $pdo->errorInfo()[2]);
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            echo "<tr>
+                    <td>" . htmlspecialchars($row['ReservationID'], ENT_QUOTES, 'UTF-8') . "</td>
+                    <td>" . htmlspecialchars($row['UserName'], ENT_QUOTES, 'UTF-8') . "</td>
+                    <td>" . htmlspecialchars($row['EventName'], ENT_QUOTES, 'UTF-8') . "</td>
+                    <td>" . htmlspecialchars($row['EventDate'], ENT_QUOTES, 'UTF-8') . "</td>
+                    <td>" . htmlspecialchars($row['StartPoint'], ENT_QUOTES, 'UTF-8') . " → " . htmlspecialchars($row['EndPoint'], ENT_QUOTES, 'UTF-8') . "</td>
+                    <td>" . htmlspecialchars($row['Status'], ENT_QUOTES, 'UTF-8') . "</td>
+                    <td>" . htmlspecialchars($row['ReservationDate'], ENT_QUOTES, 'UTF-8') . "</td>
+                  </tr>";
+        }
+        echo "</table>";
+    } else {
+        echo "No reservations found.";
+    }
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Trips</title>
-</head>
-
-<body>
-    <h1>Manage Trips</h1>
-    <a href="add_event_type.php">Add New Event Type</a><br><br>
-    <a href="add_trip.php">Add New Trip</a><br><br>
-       
-    <?php if ($result->rowCount() > 0): ?>
-        <table border="1">
-            <tr>
-                <th>Trip ID</th>
-                <th>Route</th>
-                <th>Bus</th>
-                <th>Event Name</th>
-                <th>Event Date</th>
-                <th>Description</th>
-                <th>Actions</th>
-            </tr>
-            <?php while ($trip = $result->fetch(PDO::FETCH_ASSOC)): ?>
-                <tr>
-                    <td><?= $trip['TripID'] ?></td>
-                    <td><?= $trip['StartPoint'] ?> - <?= $trip['EndPoint'] ?></td>
-                    <td><?= $trip['PlateNumber'] ?></td>
-                    <td><?= $trip['EventName'] ?></td>
-                    <td><?= $trip['EventDate'] ?></td>
-                    <td><?= $trip['Description'] ?></td>
-                    <td>
-                    <a href="edit_trip.php?tripID=<?= $trip['TripID'] ?>">Edit</a> |
-                    <a href="delete_trip.php?tripID=<?= $trip['TripID'] ?>">Delete</a>
-
-
-                    </td>
-                </tr>
-            <?php endwhile; ?>
-        </table>
-    <?php else: ?>
-        <p>No trips found.</p>
-    <?php endif; ?>
-</body>
-
-</html>
