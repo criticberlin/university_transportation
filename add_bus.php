@@ -75,12 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </button>
             <div class="collapse navbar-collapse" id="ftco-nav">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-                    <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-                    <li class="nav-item"><a href="pricing.html" class="nav-link">Prices</a></li>
-                    <li class="nav-item"><a href="car.html" class="nav-link">Our Goal</a></li>
-                    <li class="nav-item"><a href="blog.html" class="nav-link">Reviews</a></li>
-                    <li class="nav-item"><a href="contact.html" class="nav-link">Contact Us</a></li>
+                <li class="nav-item"><a href="index.php" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="about.php" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="pricing.php" class="nav-link">Prices</a></li>
+                <li class="nav-item"><a href="contact.php" class="nav-link">Contact Us</a></li>
                     <li class="nav-item"><a href="manage_buses.php" class="nav-link">Back to Buses</a></li>
                 </ul>
             </div>
