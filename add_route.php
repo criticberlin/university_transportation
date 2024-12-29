@@ -1,5 +1,5 @@
 <?php
-include 'db.php'; // Assuming your PDO connection is set in this file
+include 'db.php'; 
 session_start();
 
 if (!isset($_SESSION['UserID']) || $_SESSION['UserType'] != 'Administrator') {
