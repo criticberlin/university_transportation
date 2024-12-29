@@ -154,10 +154,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <?php echo htmlspecialchars($bus['Capacity']); ?>
                                     </td>
                                     <td contenteditable="false" class="user-phone">
-                                        <?php echo htmlspecialchars($bus['Status']); ?>
-                                    </td>
-                                    <td>
-                                        <?php echo htmlspecialchars($bus['Actions']); ?>
+                                        <?php echo htmlspecialchars($bus['BusStatus']); ?>
                                     </td>
                                     <td>
                                         <a href="delete_bus.php?id=<?php echo $bus['BusID']; ?>" 

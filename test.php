@@ -1,12 +1,45 @@
 <?php
 
-include 'db.php';
-
-
 session_start();
 if (!isset($_SESSION['UserID']) || $_SESSION['UserType'] != 'Administrator') {
     header("Location: login.html");
     exit();
+}
+
+
+include 'db.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $plateNumber = trim($_POST['PlateNumber']);
+    $capacity = (int)$_POST['Capacity'];
+    $busStatus = $_POST['BusStatus'];
+    $driverEmail = $_POST['DriverEmail'];
+
+    if (!empty($plateNumber) && $capacity > 0) {
+
+        $stmt = $pdo->prepare("SELECT UserID FROM Users WHERE Email = :email AND UserType = 'Driver'");
+        $stmt->execute([':email' => $driverEmail]);
+        $driver = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($driver) {
+
+            $stmt = $pdo->prepare("INSERT INTO Buses (PlateNumber, Capacity, BusStatus, DriverID) VALUES (:plateNumber, :capacity, :busStatus, :driverID)");
+            $stmt->execute([
+                ':plateNumber' => $plateNumber,
+                ':capacity' => $capacity,
+                ':busStatus' => $busStatus,
+                ':driverID' => $driver['UserID'], 
+            ]);
+
+           
+            $successMessage = "Bus added successfully!";
+        } else {
+            
+            $errorMessage = "No driver found with the provided email.";
+        }
+    } else {
+        $errorMessage = "Please fill all fields correctly.";
+    }
 }
 ?>
 
@@ -16,96 +49,44 @@ if (!isset($_SESSION['UserID']) || $_SESSION['UserType'] != 'Administrator') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Buses</title>
+    <title>Add New Bus</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-
-        .container {
-            width: 80%;
-            margin: auto;
-            padding: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        table,
-        th,
-        td {
-            border: 1px solid #ddd;
-        }
-
-        th,
-        td {
-            padding: 10px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f4f4f4;
-        }
-
-        a {
-            text-decoration: none;
-            color: blue;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
+      
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Welcome, Admin: <?php echo htmlspecialchars($_SESSION['FullName']); ?></h1>
+        <h1>Add New Bus</h1>
 
-        <h2>Manage Buses</h2>
+        
+        <?php if (isset($successMessage)): ?>
+            <p class="success"><?= htmlspecialchars($successMessage); ?></p>
+        <?php elseif (isset($errorMessage)): ?>
+            <p class="error"><?= htmlspecialchars($errorMessage); ?></p>
+        <?php endif; ?>
 
-        <?php
+      
+        <form method="POST" action="add_bus.php">
+            <label for="PlateNumber">Plate Number:</label>
+            <input type="text" id="PlateNumber" name="PlateNumber" placeholder="Enter Plate Number" required>
 
-$stmt = $pdo->prepare("SELECT * FROM Buses");
-        $stmt->execute();
-        $buses = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            <label for="Capacity">Capacity:</label>
+            <input type="number" id="Capacity" name="Capacity" placeholder="Enter Capacity" min="1" required>
 
-        if ($buses) {
-            echo "<table>
-                    <tr>
-                        <th>Bus ID</th>
-                        <th>Plate Number</th>
-                        <th>Capacity</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>";
+            <label for="BusStatus">Bus Status:</label>
+            <select id="BusStatus" name="BusStatus" required>
+                <option value="Available">Available</option>
+                <option value="Unavailable">Unavailable</option>
+            </select>
 
-            foreach ($buses as $bus) {
-                echo "<tr>
-                        <td>" . htmlspecialchars($bus['BusID']) . "</td>
-                        <td>" . htmlspecialchars($bus['PlateNumber']) . "</td>
-                        <td>" . htmlspecialchars($bus['Capacity']) . "</td>
-                        <td>" . htmlspecialchars($bus['BusStatus']) . "</td>
-                        <td>
-                            <a href='edit_bus.php?busid=" . urlencode($bus['BusID']) . "'>Edit</a> |
-                            <a href='delete_bus.php?busid=" . urlencode($bus['BusID']) . "' onclick=\"return confirm('Are you sure you want to delete this bus?')\">Delete</a>
-                        </td>
-                      </tr>";
-            }
+            <label for="DriverEmail">Driver Email:</label>
+            <input type="email" id="DriverEmail" name="DriverEmail" placeholder="Enter Driver's Email" required>
 
-            echo "</table>";
-        } else {
-            echo "<p>No buses found.</p>";
-        }
-        ?>
+            <button type="submit">Add Bus</button>
+        </form>
 
-        <br>
-        <a href="add_bus.php">Add New Bus</a>
-
-        <br><br>
-        <a href="logout.php">Logout</a>
+        <p><a href="manage_buses.php">Back to Manage Buses</a></p>
     </div>
 </body>
 
