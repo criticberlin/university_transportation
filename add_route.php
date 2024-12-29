@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <li class="nav-item"><a href="car.html" class="nav-link">Our Goal</a></li>
                     <li class="nav-item"><a href="blog.html" class="nav-link">Reviews</a></li>
                     <li class="nav-item"><a href="contact.html" class="nav-link">Contact Us</a></li>
-                    <li class="nav-item"><a href="manage_users.php" class="nav-link">Back to Routes</a></li>
+                    <li class="nav-item"><a href="manage_routes.php" class="nav-link">Back to Routes</a></li>
                 </ul>
             </div>
         </div>

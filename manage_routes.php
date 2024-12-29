@@ -37,7 +37,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>SUTSwift - Manage Users</title>
+    <title>SUTSwift - Manage Routes</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
@@ -145,7 +145,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </thead>
                         <tbody>
                             <?php foreach ($routes as $route): ?>
-                                <tr data-routeid="<?php echo $user['RouteID']; ?>">
+                                <tr data-routeid="<?php echo $route['RouteID']; ?>">
                                     <td><?php echo htmlspecialchars($route['RouteID']); ?></td>
                                     <td contenteditable="false" class="user-name">
                                         <?php echo htmlspecialchars($route['StartPoint']); ?>
