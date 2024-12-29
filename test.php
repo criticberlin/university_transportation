@@ -1,45 +1,21 @@
 <?php
-
 session_start();
+
 if (!isset($_SESSION['UserID']) || $_SESSION['UserType'] != 'Administrator') {
-    header("Location: login.html");
+    header("Location: login.php");
     exit();
 }
 
-
 include 'db.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $plateNumber = trim($_POST['PlateNumber']);
-    $capacity = (int)$_POST['Capacity'];
-    $busStatus = $_POST['BusStatus'];
-    $driverEmail = $_POST['DriverEmail'];
+$sql = "SELECT t.TripID, r.StartPoint, r.EndPoint, b.PlateNumber, t.EventName, t.EventDate, t.Description
+        FROM Trips t
+        JOIN Routes r ON t.RouteID = r.RouteID
+        JOIN Buses b ON t.BusID = b.BusID";
+$result = $pdo->query($sql); 
 
-    if (!empty($plateNumber) && $capacity > 0) {
-
-        $stmt = $pdo->prepare("SELECT UserID FROM Users WHERE Email = :email AND UserType = 'Driver'");
-        $stmt->execute([':email' => $driverEmail]);
-        $driver = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($driver) {
-
-            $stmt = $pdo->prepare("INSERT INTO Buses (PlateNumber, Capacity, BusStatus, DriverID) VALUES (:plateNumber, :capacity, :busStatus, :driverID)");
-            $stmt->execute([
-                ':plateNumber' => $plateNumber,
-                ':capacity' => $capacity,
-                ':busStatus' => $busStatus,
-                ':driverID' => $driver['UserID'], 
-            ]);
-
-           
-            $successMessage = "Bus added successfully!";
-        } else {
-            
-            $errorMessage = "No driver found with the provided email.";
-        }
-    } else {
-        $errorMessage = "Please fill all fields correctly.";
-    }
+if (!$result) {
+    die("Error executing query: " . $pdo->errorInfo()[2]);
 }
 ?>
 
@@ -49,45 +25,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Bus</title>
-    <style>
-      
-    </style>
+    <title>Manage Trips</title>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Add New Bus</h1>
+    <h1>Manage Trips</h1>
+    <a href="add_event_type.php">Add New Event Type</a><br><br>
+    <a href="add_trip.php">Add New Trip</a><br><br>
+       
+    <?php if ($result->rowCount() > 0): ?>
+        <table border="1">
+            <tr>
+                <th>Trip ID</th>
+                <th>Route</th>
+                <th>Bus</th>
+                <th>Event Name</th>
+                <th>Event Date</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+            <?php while ($trip = $result->fetch(PDO::FETCH_ASSOC)): ?>
+                <tr>
+                    <td><?= $trip['TripID'] ?></td>
+                    <td><?= $trip['StartPoint'] ?> - <?= $trip['EndPoint'] ?></td>
+                    <td><?= $trip['PlateNumber'] ?></td>
+                    <td><?= $trip['EventName'] ?></td>
+                    <td><?= $trip['EventDate'] ?></td>
+                    <td><?= $trip['Description'] ?></td>
+                    <td>
+                    <a href="edit_trip.php?tripID=<?= $trip['TripID'] ?>">Edit</a> |
+                    <a href="delete_trip.php?tripID=<?= $trip['TripID'] ?>">Delete</a>
 
-        
-        <?php if (isset($successMessage)): ?>
-            <p class="success"><?= htmlspecialchars($successMessage); ?></p>
-        <?php elseif (isset($errorMessage)): ?>
-            <p class="error"><?= htmlspecialchars($errorMessage); ?></p>
-        <?php endif; ?>
 
-      
-        <form method="POST" action="add_bus.php">
-            <label for="PlateNumber">Plate Number:</label>
-            <input type="text" id="PlateNumber" name="PlateNumber" placeholder="Enter Plate Number" required>
-
-            <label for="Capacity">Capacity:</label>
-            <input type="number" id="Capacity" name="Capacity" placeholder="Enter Capacity" min="1" required>
-
-            <label for="BusStatus">Bus Status:</label>
-            <select id="BusStatus" name="BusStatus" required>
-                <option value="Available">Available</option>
-                <option value="Unavailable">Unavailable</option>
-            </select>
-
-            <label for="DriverEmail">Driver Email:</label>
-            <input type="email" id="DriverEmail" name="DriverEmail" placeholder="Enter Driver's Email" required>
-
-            <button type="submit">Add Bus</button>
-        </form>
-
-        <p><a href="manage_buses.php">Back to Manage Buses</a></p>
-    </div>
+                    </td>
+                </tr>
+            <?php endwhile; ?>
+        </table>
+    <?php else: ?>
+        <p>No trips found.</p>
+    <?php endif; ?>
 </body>
 
 </html>
