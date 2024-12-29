@@ -1,53 +1,96 @@
 <?php
 include 'db.php';  
+session_start();
 
-$sql = "
+if (!isset($_SESSION['UserID']) || $_SESSION['UserType'] != 'Student') {
+    header("Location: login.html");
+    exit();
+}
+
+$userID = $_SESSION['UserID'];
+
+$stmt = $pdo->prepare("
     SELECT 
-        ER.EventReservationID AS ReservationID,
-        U.FullName AS UserName, 
-        T.EventName AS EventName,
-        T.EventDate AS EventDate,
+        ER.EventReservationID,
+        ER.ReservationDate,
+        ER.Status,
+        T.EventName,  -- تأكد من أن العمود المناسب موجود في الجدول المناسب
+        T.EventDate,  -- تأكد من أن العمود المناسب موجود في الجدول المناسب
         Rt.StartPoint,
         Rt.EndPoint,
-        ER.Status,
-        ER.ReservationDate
+        B.PlateNumber AS BusPlateNumber
     FROM eventreservations ER
-    INNER JOIN Users U ON ER.UserID = U.UserID
-    INNER JOIN Trips T ON ER.TripID = T.TripID
-    INNER JOIN Routes Rt ON T.RouteID = Rt.RouteID
-";
+    INNER JOIN trips T ON ER.TripID = T.TripID
+    INNER JOIN routes Rt ON T.RouteID = Rt.RouteID
+    INNER JOIN buses B ON T.BusID = B.BusID
+    WHERE ER.UserID = ? 
+    ORDER BY ER.ReservationDate DESC
+");
+$stmt->execute([$userID]);
+$reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 
-try {
-    $stmt = $pdo->query($sql);
+<!DOCTYPE html>
+<html lang="en">
 
-    if ($stmt->rowCount() > 0) {
-        echo "<table border='1'>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Reservations</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <h1>My Reservations</h1>
+
+    <?php if (isset($message)): ?>
+        <p style="color: green;"><?= htmlspecialchars($message) ?></p>
+    <?php endif; ?>
+    <?php if (isset($error)): ?>
+        <p style="color: red;"><?= htmlspecialchars($error) ?></p>
+    <?php endif; ?>
+
+    <?php if (count($reservations) > 0): ?>
+        <table border="1" cellpadding="10" cellspacing="0">
+            <thead>
                 <tr>
-                    <th>Reservation ID</th>
-                    <th>User Name</th>
+                    <th>#</th>
                     <th>Event Name</th>
                     <th>Event Date</th>
                     <th>Route</th>
-                    <th>Status</th>
+                    <th>Bus Plate</th>
                     <th>Reservation Date</th>
-                </tr>";
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($reservations as $index => $reservation): ?>
+                    <tr>
+                        <td><?= $index + 1 ?></td>
+                        <td><?= htmlspecialchars($reservation['EventName']) ?></td>
+                        <td><?= htmlspecialchars($reservation['EventDate']) ?></td>
+                        <td><?= htmlspecialchars($reservation['StartPoint']) ?> → <?= htmlspecialchars($reservation['EndPoint']) ?></td>
+                        <td><?= htmlspecialchars($reservation['BusPlateNumber']) ?></td>
+                        <td><?= htmlspecialchars($reservation['ReservationDate']) ?></td>
+                        <td><?= htmlspecialchars($reservation['Status']) ?></td>
+                        <td>
+                            <?php if ($reservation['Status'] === 'Confirmed'): ?>
+                                <form action="" method="POST" style="display:inline;">
+                                    <input type="hidden" name="reservation_id" value="<?= $reservation['EventReservationID'] ?>">
+                                    <button type="submit" onclick="return confirm('Are you sure you want to cancel this reservation?')">Cancel</button>
+                                </form>
+                            <?php else: ?>
+                                <span>Not Cancelable</span>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <p>You have no reservations yet.</p>
+    <?php endif; ?>
+</body>
 
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            echo "<tr>
-                    <td>" . htmlspecialchars($row['ReservationID'], ENT_QUOTES, 'UTF-8') . "</td>
-                    <td>" . htmlspecialchars($row['UserName'], ENT_QUOTES, 'UTF-8') . "</td>
-                    <td>" . htmlspecialchars($row['EventName'], ENT_QUOTES, 'UTF-8') . "</td>
-                    <td>" . htmlspecialchars($row['EventDate'], ENT_QUOTES, 'UTF-8') . "</td>
-                    <td>" . htmlspecialchars($row['StartPoint'], ENT_QUOTES, 'UTF-8') . " → " . htmlspecialchars($row['EndPoint'], ENT_QUOTES, 'UTF-8') . "</td>
-                    <td>" . htmlspecialchars($row['Status'], ENT_QUOTES, 'UTF-8') . "</td>
-                    <td>" . htmlspecialchars($row['ReservationDate'], ENT_QUOTES, 'UTF-8') . "</td>
-                  </tr>";
-        }
-        echo "</table>";
-    } else {
-        echo "No reservations found.";
-    }
-} catch (PDOException $e) {
-    echo "Error: " . $e->getMessage();
-}
-?>
+</html>
