@@ -1,53 +1,29 @@
 <?php
-include 'db.php';
+include 'db.php';  
 session_start();
-
 
 if (!isset($_SESSION['UserID']) || $_SESSION['UserType'] != 'Student') {
     header("Location: login.html");
     exit();
 }
 
-
 $userID = $_SESSION['UserID'];
-
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reservation_id'])) {
-    $reservationID = $_POST['reservation_id'];
-
-    $stmt = $pdo->prepare("INSERT INTO Routes (StartPoint, EndPoint) VALUES (?, ?)");
-$stmt->execute([$startPoint, $endPoint]);
-
-    $stmtCheck = $pdo->prepare("SELECT COUNT(*) FROM EventReservations WHERE EventReservationID = ? AND UserID = ? AND Status = 'Confirmed'");
-    $stmtCheck->execute([$reservationID, $userID]);
-
-    if ($stmtCheck->fetchColumn() > 0) {
-        $stmtCancel = $pdo->prepare("UPDATE EventReservations SET Status = 'Cancelled' WHERE EventReservationID = ?");
-        if ($stmtCancel->execute([$reservationID])) {
-            $message = "Reservation cancelled successfully.";
-        } else {
-            $error = "Error cancelling reservation.";
-        }
-    } else {
-        $error = "Reservation not found or already cancelled.";
-    }
-}
 
 $stmt = $pdo->prepare("
     SELECT 
         ER.EventReservationID,
         ER.ReservationDate,
         ER.Status,
-        T.EventName,
-        T.EventDate,
+        T.EventName,  -- تأكد من أن العمود المناسب موجود في الجدول المناسب
+        T.EventDate,  -- تأكد من أن العمود المناسب موجود في الجدول المناسب
         Rt.StartPoint,
         Rt.EndPoint,
         B.PlateNumber AS BusPlateNumber
-    FROM EventReservations ER
-    INNER JOIN Trips T ON ER.TripID = T.TripID
-    INNER JOIN Routes Rt ON T.RouteID = Rt.RouteID
-    INNER JOIN Buses B ON T.BusID = B.BusID
-    WHERE ER.UserID = ?
+    FROM eventreservations ER
+    INNER JOIN trips T ON ER.TripID = T.TripID
+    INNER JOIN routes Rt ON T.RouteID = Rt.RouteID
+    INNER JOIN buses B ON T.BusID = B.BusID
+    WHERE ER.UserID = ? 
     ORDER BY ER.ReservationDate DESC
 ");
 $stmt->execute([$userID]);

@@ -1,21 +1,25 @@
 <?php
 session_start();
+include 'db.php';
+
+// تأكد من أن المستخدم هو "Student"
 if (!isset($_SESSION['UserID']) || $_SESSION['UserType'] != 'Student') {
     header("Location: login.html");
     exit();
 }
 
-include 'db.php';
+$userID = $_SESSION['UserID'];
 
+// التحقق من وجود متغير 'id' في الرابط والذي يمثل الـ TripID
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     echo "Invalid Trip ID.";
     exit();
 }
 
 $tripID = $_GET['id'];
-$userID = $_SESSION['UserID'];
 
-$stmtCheck = $pdo->prepare("SELECT COUNT(*) FROM EventReservations WHERE UserID = ? AND TripID = ? AND Status = 'Confirmed'");
+// التحقق من عدم وجود حجز لهذا المستخدم لهذا الـ Trip
+$stmtCheck = $pdo->prepare("SELECT COUNT(*) FROM eventreservations WHERE UserID = ? AND TripID = ? AND Status = 'Confirmed'");
 $stmtCheck->execute([$userID, $tripID]);
 $isAlreadyReserved = $stmtCheck->fetchColumn();
 
@@ -24,15 +28,17 @@ if ($isAlreadyReserved) {
     exit();
 }
 
+// إدخال الحجز الجديد في جدول eventreservations
 $stmtInsert = $pdo->prepare("
-    INSERT INTO EventReservations (UserID, TripID, ReservationDate, Status)
+    INSERT INTO eventreservations (UserID, TripID, ReservationDate, Status)
     VALUES (?, ?, NOW(), 'Confirmed')
 ");
 
 if ($stmtInsert->execute([$userID, $tripID])) {
     echo "Reservation successful!";
-    header("Location: my_reservations.php");
+    header("Location: my_reservations.php");  // بعد الحجز الناجح، قم بإعادة التوجيه إلى صفحة الحجز
     exit();
 } else {
     echo "Error processing your reservation.";
 }
+?>
