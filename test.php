@@ -1,35 +1,12 @@
 <?php
-include 'db.php'; // Assuming your PDO connection is set in this file
+
+include 'db.php';
+
+
 session_start();
-
 if (!isset($_SESSION['UserID']) || $_SESSION['UserType'] != 'Administrator') {
-    header("Location: login.php");
+    header("Location: login.html");
     exit();
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $startPoint = $_POST['StartPoint'];
-    $endPoint = $_POST['EndPoint'];
-    $distance = $_POST['DistanceKM'];
-    $description = $_POST['RouteDescription'];
-
-    $sql = "INSERT INTO Routes (StartPoint, EndPoint, DistanceKM, RouteDescription) VALUES (:startPoint, :endPoint, :distance, :description)";
-    $stmt = $pdo->prepare($sql);
-
-    // Bind parameters using PDO's bindParam method
-    $stmt->bindParam(':startPoint', $startPoint, PDO::PARAM_STR);
-    $stmt->bindParam(':endPoint', $endPoint, PDO::PARAM_STR);
-    $stmt->bindParam(':distance', $distance, PDO::PARAM_STR);
-    $stmt->bindParam(':description', $description, PDO::PARAM_STR);
-
-    // Execute the statement and check for success
-    if ($stmt->execute()) {
-        echo "Route added successfully!";
-        header("Location: manage_routes.php");
-        exit();
-    } else {
-        echo "Error: " . $stmt->errorInfo()[2];
-    }
 }
 ?>
 
@@ -39,92 +16,97 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Route</title>
+    <title>Manage Buses</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        a {
+            text-decoration: none;
+            color: blue;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Add New Route</h1>
-    <form method="POST">
-        <label>Start Point:</label>
-        <input type="text" name="StartPoint" required><br>
+    <div class="container">
+        <h1>Welcome, Admin: <?php echo htmlspecialchars($_SESSION['FullName']); ?></h1>
 
-        <label>End Point:</label>
-        <input type="text" name="EndPoint" required><br>
+        <h2>Manage Buses</h2>
 
-        <label>Distance (KM):</label>
-        <input type="number" step="0.01" name="DistanceKM" required><br>
+        <?php
 
-        <label>Description:</label>
-        <textarea name="RouteDescription"></textarea><br>
+$stmt = $pdo->prepare("SELECT * FROM Buses");
+        $stmt->execute();
+        $buses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        <button type="submit">Add Route</button>
-    </form>
-    <a href="manage_routes.php">Back to Routes</a>
-</body>
+        if ($buses) {
+            echo "<table>
+                    <tr>
+                        <th>Bus ID</th>
+                        <th>Plate Number</th>
+                        <th>Capacity</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>";
 
-</html>
-<?php
-include 'db.php'; // Assuming your PDO connection is set in this file
-session_start();
+            foreach ($buses as $bus) {
+                echo "<tr>
+                        <td>" . htmlspecialchars($bus['BusID']) . "</td>
+                        <td>" . htmlspecialchars($bus['PlateNumber']) . "</td>
+                        <td>" . htmlspecialchars($bus['Capacity']) . "</td>
+                        <td>" . htmlspecialchars($bus['BusStatus']) . "</td>
+                        <td>
+                            <a href='edit_bus.php?busid=" . urlencode($bus['BusID']) . "'>Edit</a> |
+                            <a href='delete_bus.php?busid=" . urlencode($bus['BusID']) . "' onclick=\"return confirm('Are you sure you want to delete this bus?')\">Delete</a>
+                        </td>
+                      </tr>";
+            }
 
-if (!isset($_SESSION['UserID']) || $_SESSION['UserType'] != 'Administrator') {
-    header("Location: login.php");
-    exit();
-}
+            echo "</table>";
+        } else {
+            echo "<p>No buses found.</p>";
+        }
+        ?>
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $startPoint = $_POST['StartPoint'];
-    $endPoint = $_POST['EndPoint'];
-    $distance = $_POST['DistanceKM'];
-    $description = $_POST['RouteDescription'];
+        <br>
+        <a href="add_bus.php">Add New Bus</a>
 
-    $sql = "INSERT INTO Routes (StartPoint, EndPoint, DistanceKM, RouteDescription) VALUES (:startPoint, :endPoint, :distance, :description)";
-    $stmt = $pdo->prepare($sql);
-
-    // Bind parameters using PDO's bindParam method
-    $stmt->bindParam(':startPoint', $startPoint, PDO::PARAM_STR);
-    $stmt->bindParam(':endPoint', $endPoint, PDO::PARAM_STR);
-    $stmt->bindParam(':distance', $distance, PDO::PARAM_STR);
-    $stmt->bindParam(':description', $description, PDO::PARAM_STR);
-
-    // Execute the statement and check for success
-    if ($stmt->execute()) {
-        echo "Route added successfully!";
-        header("Location: manage_routes.php");
-        exit();
-    } else {
-        echo "Error: " . $stmt->errorInfo()[2];
-    }
-}
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Route</title>
-</head>
-
-<body>
-    <h1>Add New Route</h1>
-    <form method="POST">
-        <label>Start Point:</label>
-        <input type="text" name="StartPoint" required><br>
-
-        <label>End Point:</label>
-        <input type="text" name="EndPoint" required><br>
-
-        <label>Distance (KM):</label>
-        <input type="number" step="0.01" name="DistanceKM" required><br>
-
-        <label>Description:</label>
-        <textarea name="RouteDescription"></textarea><br>
-
-        <button type="submit">Add Route</button>
-    </form>
-    <a href="manage_routes.php">Back to Routes</a>
+        <br><br>
+        <a href="logout.php">Logout</a>
+    </div>
 </body>
 
 </html>
