@@ -32,7 +32,7 @@ if (!$result) {
     <h1>Manage Trips</h1>
     <a href="add_event_type.php">Add New Event Type</a><br><br>
     <a href="add_trip.php">Add New Trip</a><br><br>
-    
+       
     <?php if ($result->rowCount() > 0): ?>
         <table border="1">
             <tr>
@@ -53,8 +53,10 @@ if (!$result) {
                     <td><?= $trip['EventDate'] ?></td>
                     <td><?= $trip['Description'] ?></td>
                     <td>
-                        <a href="edit_trip.php?tripid=<?= $trip['TripID'] ?>">Edit</a> |
-                        <a href="delete_trip.php?tripid=<?= $trip['TripID'] ?>">Delete</a>
+                    <a href="edit_trip.php?tripID=<?= $trip['TripID'] ?>">Edit</a> |
+                    <a href="delete_trip.php?tripID=<?= $trip['TripID'] ?>">Delete</a>
+
+
                     </td>
                 </tr>
             <?php endwhile; ?>
