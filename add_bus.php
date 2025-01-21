@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div class="col-lg-2 col"></div>
                 <div class="col-lg-4 col-md-6 mt-0 mt-md-5">
-                    <form action="add_user.php" method="post" class="request-form ftco-animate">
+                    <form action="add_bus.php" method="post" class="request-form ftco-animate">
                         <h2>Add Bus</h2>
                         <div class="form-group">
                             <input type="text" name="PlateNumber" class="form-control" placeholder="PlateNumber" required>

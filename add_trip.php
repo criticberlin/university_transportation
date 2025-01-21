@@ -8,8 +8,6 @@ if (!isset($_SESSION['UserID']) || $_SESSION['UserType'] != 'Administrator') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Existing POST handling code remains the same
-    // ... (keep all the existing PHP logic)
 }
 
 $routes = $pdo->query("SELECT RouteID, StartPoint, EndPoint FROM Routes");

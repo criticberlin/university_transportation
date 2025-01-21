@@ -65,7 +65,7 @@ try {
                 <li class="nav-item"><a href="about.php" class="nav-link">About</a></li>
                 <li class="nav-item"><a href="pricing.php" class="nav-link">Prices</a></li>
                 <li class="nav-item"><a href="contact.php" class="nav-link">Contact Us</a></li>
-                    <li class="nav-item"><a href="driver.php" class="nav-link">Back to Dashboard</a></li>
+                    <li class="nav-item"><a href="drivers.php" class="nav-link">Back to Dashboard</a></li>
                 </ul>
             </div>
         </div>
