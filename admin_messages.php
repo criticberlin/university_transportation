@@ -18,12 +18,13 @@ $result = $pdo->query($sql);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>SUTSwift - Admin Messages</title>
+    <title>Bakisena - Admin Messages</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/owl.carousel.min.css">
@@ -36,22 +37,24 @@ $result = $pdo->query($sql);
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" type="image/png" href="images/SUTlogo.png">
+    <link rel="icon" type="image/png" href="images/Bakisenalogo.png">
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
         <div class="container">
-            <a class="navbar-brand" href="index.html">SUT<span>Swift</span></a>
+            <a class="navbar-brand" href="index.php" class="logo">
+                <img src="images/Bakisena.png" alt="Bakisena Logo" style="height: 85px;">
+            </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="oi oi-menu"></span> Menu
             </button>
             <div class="collapse navbar-collapse" id="ftco-nav">
                 <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a href="index.php" class="nav-link">Home</a></li>
-                <li class="nav-item"><a href="about.php" class="nav-link">About</a></li>
-                <li class="nav-item"><a href="pricing.php" class="nav-link">Prices</a></li>
-                <li class="nav-item"><a href="contact.php" class="nav-link">Contact Us</a></li>
+                    <li class="nav-item"><a href="index.php" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="about.php" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="pricing.php" class="nav-link">Prices</a></li>
+                    <li class="nav-item"><a href="contact.php" class="nav-link">Contact Us</a></li>
                     <li class="nav-item"><a href="admin.php" class="nav-link">Back to Dashboard</a></li>
                 </ul>
             </div>
@@ -62,14 +65,62 @@ $result = $pdo->query($sql);
         <div class="overlay"></div>
         <div class="container">
             <div class="row no-gutters slider-text justify-content-start align-items-center">
-                <div class="col-lg-12 ftco-animate">
-                    <div class="text w-100 mb-4 mt-5">
+                <div class="col-lg-6 col-md-6 ftco-animate d-flex align-items-end">
+                    <div class="text">
                         <h1 class="mb-4">View Messages</h1>
+                    </div>
+                </div>
+                <div class="col-lg-2 col"></div>
+                <!-- NEW BUTTONS SECTION -->
+                <div class="col-lg-4 col-md-6 mt-0 mt-md-5 d-flex">
+                    <div class="request-form ftco-animate">
+                        <h2>Admin Dashboard</h2>
+                        <div class="dashboard-buttons">
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <a href="manage_users.php" class="btn btn-admin btn-lg btn-block d-flex align-items-center justify-content-between">
+                                        <span><i class="icon-shield mr-2"></i>Manage Users</span>
+                                        <i class="icon-arrow-right"></i>
+                                    </a>
+                                </li>
+                                <li class="mb-3">
+                                    <a href="manage_drivers.php" class="btn btn-admin btn-lg btn-block d-flex align-items-center justify-content-between">
+                                        <span><i class="icon-cog mr-2"></i>Manage Drivers</span>
+                                        <i class="icon-arrow-right"></i>
+                                    </a>
+                                </li>
+                                <li class="mb-3">
+                                    <a href="manage_routes.php" class="btn btn-admin btn-lg btn-block d-flex align-items-center justify-content-between">
+                                        <span><i class="icon-shield mr-2"></i>Manage Routes</span>
+                                        <i class="icon-arrow-right"></i>
+                                    </a>
+                                </li>
+                                <li class="mb-3">
+                                    <a href="manage_buses.php" class="btn btn-admin btn-lg btn-block d-flex align-items-center justify-content-between">
+                                        <span><i class="icon-cog mr-2"></i>Manage Buses</span>
+                                        <i class="icon-arrow-right"></i>
+                                    </a>
+                                </li>
+                                <li class="mb-3">
+                                    <a href="manage_trips.php" class="btn btn-admin btn-lg btn-block d-flex align-items-center justify-content-between">
+                                        <span><i class="icon-shield mr-2"></i>Manage Trips</span>
+                                        <i class="icon-arrow-right"></i>
+                                    </a>
+                                </li>
+                                <li class="mb-3">
+                                    <a href="view_reports.php" class="btn btn-admin btn-lg btn-block d-flex align-items-center justify-content-between">
+                                        <span><i class="icon-cog mr-2"></i>View Reports</span>
+                                        <i class="icon-arrow-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 
     <section class="ftco-section">
         <div class="container">
@@ -116,7 +167,9 @@ $result = $pdo->query($sql);
         <div class="container">
             <div class="row">
                 <div class="col-md-12 text-center">
-                    <p>Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://sut.edu.eg/" target="_blank">SutSwift Team</a></p>
+                    <p> Copyright &copy;<script>
+                            document.write(new Date().getFullYear());
+                        </script> All rights reserved | This template is made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="index.php" target="_blank">Bakisena</a></p>
                 </div>
             </div>
         </div>
@@ -125,8 +178,8 @@ $result = $pdo->query($sql);
     <!-- loader -->
     <div id="ftco-loader" class="show fullscreen">
         <svg class="circular" width="48px" height="48px">
-            <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
-            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/>
+            <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" />
         </svg>
     </div>
 
@@ -146,4 +199,5 @@ $result = $pdo->query($sql);
     <script src="js/scrollax.min.js"></script>
     <script src="js/main.js"></script>
 </body>
+
 </html>

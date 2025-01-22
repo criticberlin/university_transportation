@@ -1,0 +1,160 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-color: #0a0a1a; /* Deep, dark blue background */
+	background-image: url('http://localhost/university_transportation/images/LoginImage.jpg');
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
+	font-family: 'Poppins', sans-serif; /* Modern font */
+	color: #f5f5f5;
+	opacity: 0; /* Start with invisible body */
+	animation: fadeIn 1s ease-in-out forwards; /* Faster fade-in animation */
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+input,
+button {
+	font-size: medium;
+}
+
+a {
+	text-decoration: none;
+	color: #fbff00; /* Vibrant yellow for links */
+	transition: color 0.3s ease; /* Smooth transition for link color */
+}
+
+a:hover {
+	color: #ffcc00; /* Slightly darker yellow on hover */
+}
+
+.login-page {
+	display: flex;
+	justify-content: center; /* Center horizontally */
+	align-items: center; /* Center vertically */
+	min-height: 100vh; /* Full viewport height */
+	padding: 1.5rem; /* Add some padding for smaller screens */
+}
+
+.login-form {
+	background-color: rgba(10, 10, 26, 0.514); /* Semi-transparent dark blue */
+	border: 2px solid rgba(251, 255, 0, 0.2); /* Light border with transparency */
+	padding: 2.5rem 1.5rem;
+	color: #f5f5f5;
+	border-radius: 1.5rem;
+	backdrop-filter: blur(16px);
+	box-shadow: 0 8px 32px rgba(251, 255, 0, 0.2); /* Soft shadow with a hint of yellow */
+	opacity: 0; /* Start with invisible wrapper */
+	animation: slideUp 0.5s ease-in-out 0.3s forwards; /* Smoother slide-up animation with delay */
+	width: 100%; /* Full width on small screens */
+	max-width: 420px; /* Limit width on larger screens */
+}
+
+@keyframes slideUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.login-title {
+	text-align: center;
+	font-size: 45px;
+	margin-bottom: 1.25rem;
+	color: #fbff00; /* Vibrant yellow for the title */
+	text-shadow: 0 0 15px rgba(251, 255, 0, 0.8); /* Enhanced glow effect */
+}
+
+.form-group {
+	display: grid;
+	row-gap: 1.25rem;
+	margin-bottom: 1rem;
+}
+
+.form-control {
+	width: 100%;
+	padding: 1rem;
+	border: 2px solid rgba(251, 255, 0, 0.2); /* Light border with transparency */
+	border-radius: 4rem;
+	background-color: rgba(255, 255, 255, 0.1); /* Slight transparency */
+	color: #f5f5f5;
+	font-family: 'Poppins', sans-serif;
+	font-size: medium;
+	outline: none;
+	transition: all 0.3s ease; /* Smooth transition */
+}
+
+.form-control::placeholder {
+	color: #d3d3d3;
+}
+
+.form-control:hover {
+	border-color: rgba(251, 255, 0, 0.5); /* Highlight border on hover */
+	transform: scale(1.02); /* Slight zoom effect */
+	box-shadow: 0 0 15px rgba(251, 255, 0, 0.3); /* Glow effect on hover */
+}
+
+.btn {
+	width: 100%;
+	padding: 1rem;
+	border: none;
+	outline: none;
+	background: linear-gradient(
+		135deg,
+		#fbff00,
+		#ffcc00
+	); /* Gradient for buttons */
+	color: #1e1e2f;
+	font-weight: 600;
+	border-radius: 4rem;
+	cursor: pointer;
+	margin-bottom: 1rem;
+	transition: all 0.3s ease; /* Smooth transition */
+}
+
+.btn:hover {
+	background: linear-gradient(
+		135deg,
+		#ffcc00,
+		#fbff00
+	); /* Reverse gradient on hover */
+	box-shadow: 0 0 20px rgba(251, 255, 0, 0.6); /* Enhanced glow effect */
+	transform: translateY(-2px); /* Slight lift */
+}
+
+.forgot-password {
+	display: block;
+	text-align: center;
+	margin-top: 1rem;
+	color: #fbff00;
+	transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+	color: #ffcc00;
+}
+
+@media (min-width: 576px) {
+	.login-form {
+		padding-inline: 2.5rem;
+	}
+	.login-title {
+		margin-bottom: 2rem;
+	}
+}
